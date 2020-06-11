@@ -36,6 +36,7 @@ const render = require("./lib/htmlRenderer");
 // object with the correct structure and methods. This structure will be crucial in order
 // for the provided `render` function to work! ```
 
+// establishes all variables
 let role;
 let name;
 let id;
@@ -47,25 +48,27 @@ let school;
 
 const employees = [];
 
+// beginning prompt for establishing team members
 const menu = () => {
     inquirer.prompt([
         {
             type: 'list',
             name: 'Employee Role',
-            message: "What is the person's role in the company? Select 'No more employees' if there are no more people to add.",
+            message: "What is the person's role in the company? Or select 'No more employees' if there are no more people to add.",
             choices: ['Engineer', 'Intern', 'Manager', 'No more employees']
         },
     ]).then(workers => {
 
-        console.log(workers);
+        //console.log(workers);
 
         role = workers['Employee Role'];
-        console.log(role);
-
+        //console.log(role);
+        // next set of questions
         subMenu();
     })
 }
 
+// second prompted question is specific to the role of the team member
 const subMenu = () => {
 
     switch (role) {
@@ -79,9 +82,9 @@ const subMenu = () => {
                 }
             ]).then(handle => {
 
-                console.log(handle);
+                //console.log(handle);
                 github = handle["GitHub Username"];
-                console.log(github);
+                //console.log(github);
                 subMenu2();
             })
 
@@ -96,9 +99,9 @@ const subMenu = () => {
                 }
             ]).then(office => {
 
-                console.log(office);
+                //console.log(office);
                 officeNumber = office["Office Number"];
-                console.log(officeNumber);
+                //console.log(officeNumber);
                 subMenu2();
             })
 
@@ -108,30 +111,31 @@ const subMenu = () => {
             inquirer.prompt([
                 {
                     type: 'input',
-                    name: "Sponsoring School",
+                    name: "School",
                     message: "Which school is the intern attending?"
                 }
             ]).then(sponsor => {
 
-                console.log(sponsor);
-                school = sponsor["Sponsoring School"];
-                console.log(school);
+                //console.log(sponsor);
+                school = sponsor["School"];
+                //console.log(school);
                 subMenu2();
             })
 
             break;
 
         case 'No more employees':
-
+            // at this point, when all team members have been accounted for, the html will be rendered based on the results of the team members inputs
             render(employees);
-            let results = render(employees)
+            let results = render(employees);
+            console.log("Successfully generated your team's webpage!");
             return writeFileAsync(outputPath, results);
 
     }
 }
 
 
-
+// asks inputs about the employee's names, id numbers, and e-mail addresses
 const subMenu2 = () => {
 
     inquirer.prompt([
@@ -157,11 +161,11 @@ const subMenu2 = () => {
     ]).then(answers => {
 
         name = answers['Employee Name'];
-        console.log(name);
+        //console.log(name);
         id = answers['Employee ID'];
-        console.log(id);
+        //console.log(id);
         email = answers['Employee Email'];
-        console.log(email);
+        //console.log(email);
 
         subMenu3();
 
@@ -169,6 +173,8 @@ const subMenu2 = () => {
 
 }
 
+// once the questions have been answered, answers are pushed into the appropriate classes to construct their properties as 
+// objects and are then returned to the main menu (first question to add more members if necessary)
 const subMenu3 = () => {
 
     switch (role) {
@@ -197,5 +203,5 @@ const subMenu3 = () => {
     }
 }
 
-
+// initiates the prompted questions 
 menu();
