@@ -195,4 +195,4 @@ const subMenu3 = () => {
 
 
 menu();
-module.exports = Employees;
+module.exports = Employee;
